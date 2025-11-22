@@ -2,6 +2,13 @@ body {
   /* background-color: lightblue; */
   /* margin: 10px; */
   margin: 10px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  flex: 1;
 }
 
 .navbar {
@@ -13,6 +20,11 @@ body {
 .fa-compass {
   color: #fa424d;
   font-size: 2rem;
+}
+
+.add-btn {
+  background-color: #fa424d !important;
+  border: none;
 }
 
 /* Footer  */

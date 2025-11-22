@@ -1,37 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WanderLust</title>
-  </head>
-  <body>
-    <h3>Create a New Listing</h3>
-    <form method="POST" action="/listings">
-      <input name="listing[title]" placeholder="enter title" type="text" />
-      <br /><br />
+<% layout('/layouts/boilerplate') -%>
+<body class="container py-4">
+  <br /><br />
+  <h3 class="mb-4">Create a New Listing</h3>
+
+  <form method="POST" action="/listings" class="w-75">
+    <!-- Title -->
+    <div class="mb-3">
+      <label class="form-label">Title</label>
+      <input
+        name="listing[title]"
+        type="text"
+        placeholder="Enter title"
+        class="form-control"
+      />
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+      <label class="form-label">Description</label>
       <textarea
         name="listing[description]"
-        placeholder="enter description"
+        placeholder="Enter description"
+        class="form-control"
+        rows="3"
       ></textarea>
-      <br /><br />
+    </div>
+
+    <!-- Image -->
+    <div class="mb-3">
+      <label class="form-label">Image URL</label>
       <input
-        name="listing[image]"
-        placeholder="enter image URL/Link"
+        name="listing[image][url]"
         type="text"
+        placeholder="Enter image URL"
+        class="form-control"
       />
-      <br /><br />
-      <input name="listing[price]" placeholder="enter price" type="number" />
-      <br /><br />
-      <input name="listing[country]" placeholder="enter country" type="text" />
-      <br /><br />
+    </div>
+
+    <!-- Price -->
+    <div class="mb-3">
+      <label class="form-label">Price</label>
+      <input
+        name="listing[price]"
+        type="number"
+        placeholder="Enter price"
+        class="form-control"
+      />
+    </div>
+
+    <!-- Country -->
+    <div class="mb-3">
+      <label class="form-label">Country</label>
+      <input
+        name="listing[country]"
+        type="text"
+        placeholder="Enter country"
+        class="form-control"
+      />
+    </div>
+
+    <!-- Location -->
+    <div class="mb-3">
+      <label class="form-label">Location</label>
       <input
         name="listing[location]"
-        placeholder="enter location"
         type="text"
+        placeholder="Enter location"
+        class="form-control"
       />
-      <br /><br />
-      <button>Add</button>
-    </form>
-  </body>
-</html>
+    </div>
+
+    <!-- Submit -->
+    <button class="btn btn-primary mt-2 add-btn">Add</button>
+  </form>
+  <br /><br /><br />
+  <!-- Bootstrap JS -->
+</body>

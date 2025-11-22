@@ -1,18 +1,53 @@
 <% layout('/layouts/boilerplate') -%>
-<body>
-  <h3>Listing Details :</h3>
-  <h2><%= listing.title %></h2>
-  <ul>
-    <li><%= listing.title %></li>
-    <li><%= listing.description %></li>
-    <li>&#8377; <%= listing.price.toLocaleString("en-IN") %></li>
-    <li><%= listing.location %></li>
-    <li><%= listing.country %></li>
-  </ul>
-  <br />
-  <a href="/listings/<%= listing._id %>/edit">Edit this Listing</a>
-  <br /><br />
-  <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
-    <button>Delete this listing</button>
-  </form>
+
+<body class="container py-4">
+  <!-- Heading -->
+  <h3 class="mb-4 fw-semibold">Listing Details :</h3>
+
+  <!-- Card Container -->
+  <div class="card shadow-sm mb-4" style="max-width: 40rem">
+    <img
+      src="<%= listing.image.url %>"
+      class="card-img-top"
+      alt="listing_image"
+    />
+
+    <div class="card-body">
+      <!-- Title -->
+      <h2 class="card-title"><%= listing.title %></h2>
+
+      <!-- Details List -->
+      <ul class="list-group list-group-flush my-3">
+        <li class="list-group-item">
+          <strong>Description:</strong> <%= listing.description %>
+        </li>
+        <li class="list-group-item">
+          <strong>Price:</strong> ₹ <%= listing.price.toLocaleString("en-IN") %>
+        </li>
+        <li class="list-group-item">
+          <strong>Location:</strong> <%= listing.location %>
+        </li>
+        <li class="list-group-item">
+          <strong>Country:</strong> <%= listing.country %>
+        </li>
+      </ul>
+
+      <!-- Action Buttons -->
+      <div class="d-flex gap-3 mt-3">
+        <a
+          href="/listings/<%= listing._id %>/edit"
+          class="btn btn-warning px-4"
+        >
+          Edit Listing
+        </a>
+
+        <form
+          method="POST"
+          action="/listings/<%= listing._id %>?_method=DELETE"
+        >
+          <button class="btn btn-danger px-4">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </body>
