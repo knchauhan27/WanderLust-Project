@@ -1,0 +1,177 @@
+body {
+  /* background-color: lightblue; */
+  /* margin: 10px; */
+  margin: 10px;
+}
+
+.navbar {
+  height: 5rem;
+  color: black !important;
+  margin: 0px !important;
+}
+
+.fa-compass {
+  color: #fa424d;
+  font-size: 2rem;
+}
+
+/* Footer  */
+/* .f-info {
+  background-color: #ebebeb;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+}
+
+.f-socials,
+.f-info-links {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.f-socials {
+  font-size: 1.3rem;
+}
+
+.f-info-links a {
+  text-decoration: none;
+  color: #2a2a2a;
+}
+
+.f-info-links a:hover {
+  text-decoration: underline;
+  color: #2a2a2a;
+} */
+
+/* --- Global Variables for Consistency (Highly Recommended) --- */
+:root {
+  --footer-bg-color: #f7f7f7; /* Light background for contrast */
+  --text-color: #333; /* Dark, professional text */
+  --link-hover-color: #007bff; /* Sleek blue for interaction */
+  --font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Professional font */
+  --padding-y: 30px; /* Consistent vertical padding */
+}
+
+/* --- Base Footer Container Styling --- */
+.f-info {
+  background-color: var(--footer-bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  padding: var(--padding-y) 15px; /* Added vertical padding for breathing room */
+  text-align: center; /* Centralize all content */
+
+  /* Overrides for your original flex properties */
+  display: block;
+}
+
+/* --- Social Icons Section Styling --- */
+.f-socials {
+  display: flex;
+  justify-content: center; /* Center the icons */
+  gap: 15px; /* Space between icons */
+  margin-bottom: 12px; /* Space below the social icons */
+}
+
+.f-socials i {
+  color: var(--text-color);
+  font-size: 1.5rem; /* Larger, clearer icons */
+  cursor: pointer; /* Suggests interactivity */
+  transition: color 0.3s ease; /* Smooth hover transition */
+}
+
+.f-socials i:hover {
+  color: var(--link-hover-color); /* Highlight on hover */
+}
+
+/* --- Copyright Text Styling --- */
+.f-info-title {
+  font-size: 0.95rem;
+  font-weight: 500; /* Subtle emphasis on the main title */
+  margin-bottom: 10px; /* Space above the Privacy/Terms links */
+  color: var(--text-color);
+}
+
+/* --- Privacy/Terms Links Section Styling --- */
+.f-info-links {
+  display: flex;
+  justify-content: center; /* Center the links */
+  gap: 20px; /* Space between links */
+  font-size: 0.9rem; /* Slightly smaller text for secondary info */
+}
+
+.f-info-links a {
+  color: var(--text-color);
+  text-decoration: none; /* Removed default underline */
+  transition: color 0.3s ease;
+}
+
+.f-info-links a:hover {
+  text-decoration: none;
+  color: var(--link-hover-color); /* Sleek highlight on hover */
+}
+
+/* .card {
+  margin-bottom: 2rem;
+  border: none !important;
+}
+
+.card-img-top {
+  border-radius: 1rem !important;
+  width: 100% !important;
+  object-fit: cover;
+} */
+
+/* card */
+/* Container spacing */
+.listings-container {
+  margin-top: 2rem;
+}
+
+/* Card wrapper to center each card */
+.listing-card-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+/* Card styling */
+.listing-card {
+  width: 20rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out;
+  background-color: white;
+}
+
+/* Hover effect */
+.listing-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Image styling */
+.listing-card img {
+  height: 220px;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Title + Price text */
+.listing-card .card-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  padding: 1rem;
+}
+/* 
+.card-img-overlay {
+  opacity: 0;
+}
+
+.card-img-overlay:hover {
+  background-color: white;
+  opacity: 0.2;
+} */
