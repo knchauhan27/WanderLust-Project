@@ -9,6 +9,8 @@ const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const Review = require("./models/review.js");
 const { listingSchema, reviewSchema } = require("./schema");
+// const session = require("express-session");
+// const flash = require("connect-flash");
 //---------------------------------------------------------------------------------------
 //DataBase Connections
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -44,9 +46,9 @@ app.get("/", (req, res) => {
 //validate Schema
 const validateListing = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
-  let errMsg = error.details.map((el) => el.message).join(",");
   if (error) {
-    throw new ExpressError(400, errMsg);
+    let errMsg = error.details.map((el) => el.message).join(",");
+    return next(new ExpressError(400, errMsg)); //  throw new ExpressError(400, errMsg);
   } else {
     next();
   }
@@ -87,7 +89,13 @@ app.get(
   "/listings/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews");
+
+    if (!listing) {
+      // req.flash("error", "Listing does not exist! It may have been deleted.");
+      return res.redirect("/listings");
+    }
+
     res.render("listings/show.ejs", { listing });
   })
 );
@@ -130,6 +138,8 @@ app.delete(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
+
+    // req.flash("success", "Listing deleted successfully!");
     console.log(deletedListing);
     res.redirect("/listings");
   })
@@ -154,6 +164,14 @@ app.post(
     res.redirect(`/listings/${listing._id}`);
   })
 );
+
+app.delete("/listings/:id/reviews/:reviewId", async (req, res, next) => {
+  let { id, reviewId } = req.params;
+  await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+  await Review.findByIdAndDelete(reviewId);
+
+  res.redirect(`/listings/${id}`);
+});
 
 // app.get("/testListing", async (req, res) => {
 //   let sampleListing = new Listing({
@@ -183,10 +201,10 @@ app.all("*", (req, res, next) => {
 // });
 
 app.use((err, req, res, next) => {
-  res.render("error.ejs", { err });
-  let { statusCode = 500, message = "Something went wrong" } = err;
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = "Something went wrong";
 
-  // res.status(statusCode).send(message);
+  res.status(statusCode).render("error.ejs", { err });
 });
 
 //---------------------------------------------------------------------------------------
