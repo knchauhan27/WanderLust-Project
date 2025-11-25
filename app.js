@@ -8,8 +8,9 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const Review = require("./models/review.js");
-const listingSchema = require("./schema");
-
+const { listingSchema, reviewSchema } = require("./schema");
+//---------------------------------------------------------------------------------------
+//DataBase Connections
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
 main()
@@ -23,7 +24,8 @@ main()
 async function main() {
   await mongoose.connect(MONGO_URL);
 }
-
+//---------------------------------------------------------------------------------------
+//MiddleWares
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views")); //setting index.ejs
 app.use(express.urlencoded({ extended: true }));
@@ -31,10 +33,14 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+//---------------------------------------------------------------------------------------
+
 app.get("/", (req, res) => {
   res.send("Hi, I am root");
 });
 
+//---------------------------------------------------------------------------------------
+//Sever Side Validation
 //validate Schema
 const validateListing = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
@@ -42,9 +48,22 @@ const validateListing = (req, res, next) => {
   if (error) {
     throw new ExpressError(400, errMsg);
   } else {
-    null();
+    next();
   }
 };
+
+//Review Schema Validation
+const validateReview = (req, res, next) => {
+  const { error } = reviewSchema.validate(req.body);
+
+  if (error) {
+    const errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errMsg);
+  } else {
+    next(); // not null()
+  }
+};
+//---------------------------------------------------------------------------------------
 
 //Index Route
 app.get(
@@ -115,22 +134,26 @@ app.delete(
     res.redirect("/listings");
   })
 );
-
+//---------------------------------------------------------------------------------------
 //Reviews
 //Post
-app.post("/listings/:id/reviews", async (req, res) => {
-  let listing = await Listing.findById(req.params.id);
+app.post(
+  "/listings/:id/reviews",
+  validateReview,
+  wrapAsync(async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
 
-  let newReview = new Review(req.body.review);
-  listing.reviews.push(newReview);
+    let newReview = new Review(req.body.review);
+    listing.reviews.push(newReview);
 
-  await newReview.save();
-  await listing.save();
+    await newReview.save();
+    await listing.save();
 
-  console.log("New Review Saved");
+    console.log("New Review Saved");
 
-  res.redirect(`/listings/${listing._id}`);
-});
+    res.redirect(`/listings/${listing._id}`);
+  })
+);
 
 // app.get("/testListing", async (req, res) => {
 //   let sampleListing = new Listing({
@@ -146,6 +169,8 @@ app.post("/listings/:id/reviews", async (req, res) => {
 //   res.send("successful testing");
 // });
 
+//---------------------------------------------------------------------------------------
+//Error Handling
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found Bhaila"));
 });
@@ -164,6 +189,7 @@ app.use((err, req, res, next) => {
   // res.status(statusCode).send(message);
 });
 
+//---------------------------------------------------------------------------------------
 app.listen(8080, () => {
   console.log("server is listening to port 8080");
 });
