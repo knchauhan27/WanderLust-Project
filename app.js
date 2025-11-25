@@ -62,21 +62,11 @@ app.get("/", (req, res) => {
 
 //---------------------------------------------------------------------------------------
 //Error Handling
-app.all("*", (req, res, next) => {
-  next(new ExpressError(404, "Page Not Found Bhaila"));
-});
-
-// app.use((err, req, res, next) => {
-//   console.error(err);
-//   res.status(500).send("Something Went Wrong!");
-//   let { statusCode, message } = err;
-//   res.status(statusCode).send(message);
-// });
-
 app.use((err, req, res, next) => {
-  const { statusCode = 500 } = err;
-  if (!err.message) err.message = "Something went wrong";
+  console.error("🔥 ERROR:", err.message);
+  console.error(err.stack);
 
+  const statusCode = err.statusCode || 500;
   res.status(statusCode).render("error.ejs", { err });
 });
 
