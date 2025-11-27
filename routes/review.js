@@ -2,32 +2,28 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const wrapAsync = require("../utils/wrapAsync.js");
 const Review = require("../models/review.js");
-const { reviewSchema } = require("../schema.js");
-const ExpressError = require("../utils/ExpressError.js");
 const Listing = require("../models/listing.js");
+const {
+  isOwner,
+  validateListing,
+  isAuthor,
+  isLoggedIn,
+  validateReview,
+} = require("../middleware.js");
 
 //Review Schema Validation
-const validateReview = (req, res, next) => {
-  const { error } = reviewSchema.validate(req.body);
-
-  if (error) {
-    const errMsg = error.details.map((el) => el.message).join(",");
-    // throw new ExpressError(400, errMsg);
-    return next(new ExpressError(errMsg, 400));
-  } else {
-    next(); // not null()
-  }
-};
 
 //Reviews
 //Post
 router.post(
   "/",
+  isLoggedIn,
   validateReview,
   wrapAsync(async (req, res) => {
     let listing = await Listing.findById(req.params.id);
 
     let newReview = new Review(req.body.review);
+    newReview.author = req.user._id; //the author would be the user who is currently loggedIn
     listing.reviews.push(newReview);
 
     await newReview.save();
@@ -43,6 +39,8 @@ router.post(
 
 router.delete(
   "/:reviewId",
+  isLoggedIn,
+  isAuthor,
   wrapAsync(async (req, res, next) => {
     let { id, reviewId } = req.params;
     await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });

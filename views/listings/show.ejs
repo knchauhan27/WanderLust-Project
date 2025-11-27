@@ -19,6 +19,9 @@
       <!-- Details List -->
       <ul class="list-group list-group-flush my-3">
         <li class="list-group-item">
+          <strong>Owned By:</strong> <%= listing.owner.username %>
+        </li>
+        <li class="list-group-item">
           <strong>Description:</strong> <%= listing.description %>
         </li>
         <li class="list-group-item">
@@ -33,6 +36,7 @@
       </ul>
 
       <!-- Action Buttons -->
+
       <div class="d-flex gap-3 mt-3">
         <a
           href="/listings/<%= listing._id %>/edit"
@@ -100,7 +104,7 @@
           <div class="col-md-6 mb-3">
             <div class="card shadow-sm h-100">
               <div class="card-body">
-                <h5 class="card-title">Anonymous</h5>
+                <h5 class="card-title"><%= review.author.username %></h5>
                 <p class="card-text"><%= review.comment %></p>
 
                 <p class="text-warning mb-2">
@@ -111,7 +115,6 @@
                 <span class="badge bg-primary"
                   >Rating: <%= review.rating %>/5</span
                 >
-
                 <form
                   action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE"
                   method="POST"
