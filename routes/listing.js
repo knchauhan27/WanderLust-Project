@@ -3,42 +3,44 @@ const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
 const { isOwner, validateListing, isLoggedIn } = require("../middleware.js");
 const listingController = require("../controllers/listings.js");
+const multer = require("multer");
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage });
 
-//Index Route
-router.get("/", wrapAsync(listingController.index));
+router
+  .route("/")
+  .get(wrapAsync(listingController.index)) //Index Route
+  .post(
+    isLoggedIn,
+    upload.single("image"), //this should be before the validateListing
+    validateListing,
+    wrapAsync(listingController.createNewListing) //Create Route
+  );
 
 //New Route
 router.get("/new", isLoggedIn, wrapAsync(listingController.renderNewForm));
 
-//Show Route
-router.get("/:id", isLoggedIn, wrapAsync(listingController.show));
+router
+  .route("/:id")
+  .get(isLoggedIn, wrapAsync(listingController.show)) //Show Route
+  .put(
+    //Update Route
+    isLoggedIn,
+    isOwner,
 
-//Create Route
-router.post(
-  "/",
-  validateListing,
-  isLoggedIn,
-  wrapAsync(listingController.createNewListing)
-);
+    upload.single("image"),
+    validateListing,
+
+    wrapAsync(listingController.updateForm)
+  )
+  .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing)); //Update Route
 
 //Edit Route
-router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync());
-
-//Update Route
-router.put(
-  "/:id",
-  validateListing,
+router.get(
+  "/:id/edit",
   isLoggedIn,
   isOwner,
-  wrapAsync(listingController.updateForm)
-);
-
-//Delete Route
-router.delete(
-  "/:id",
-  isLoggedIn,
-  isOwner,
-  wrapAsync(listingController.destroyListing)
+  wrapAsync(listingController.editForm)
 );
 
 // Download PDF Route
