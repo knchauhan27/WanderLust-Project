@@ -187,3 +187,10 @@ body {
   background-color: white;
   opacity: 0.2;
 } */
+
+/* Maps */
+#map {
+  height: 400px;
+  width: 80vh;
+  border-radius: 10px;
+}
