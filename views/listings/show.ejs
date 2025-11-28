@@ -1,6 +1,7 @@
 <% layout('/layouts/boilerplate') -%>
 <script>
-  const mapToken = "<%= process.env.MAP_TOKEN%>";
+  const mapToken = "<%= process.env.MAPBOX_TOKEN%>";
+  const listing = <%- JSON.stringify(listing) %>
 </script>
 <body class="container py-4">
   <!-- Listing Header -->
