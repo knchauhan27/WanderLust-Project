@@ -53,7 +53,10 @@ module.exports.editForm = async (req, res) => {
     return res.redirect("/listings");
   }
 
-  res.render("listings/edit.ejs", { listing });
+  let originalImageUrl = listing.image.url;
+  originalImageUrl = originalImageUrl.replace("/upload", "/upload/h_300,w_250");
+
+  res.render("listings/edit.ejs", { listing, originalImageUrl });
 };
 
 module.exports.updateForm = async (req, res) => {
